@@ -1,0 +1,51 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.9.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'java'
+	id "jacoco"
+	id "org.sonarqube" version "2.6"
+}
+
+group = 'com.taylor.ono'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+apply plugin: "jacoco"
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+	implementation 'javax.validation:validation-api:2.0.1.Final'
+	implementation 'com.couchbase.client:couchbase-spring-cache:2.1.0'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'com.h2database:h2'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+jacocoTestReport {
+	reports {
+		xml.enabled true
+	}
+}
+
+sonarqube {
+	properties {
+		property 'sonar.projectKey', 'package:cop'
+		property 'sonar.projectName', 'cop-demo'
+		property 'sonar.coverage.exclusions', "**/test/**" // exclude and tests from coverage
+		property "sonar.jacoco.reportPath", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+	}
+}
